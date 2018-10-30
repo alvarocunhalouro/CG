@@ -9,6 +9,8 @@ var spotlights = [];
 
 var plane;
 
+var lightMaterials = [];
+
 function createSpotlight() {
 	'use strict';
 	
@@ -32,20 +34,51 @@ function createScene() {
 	
 	scene = new THREE.Scene();
 	
+	
+		
+	lightMaterials[0] = new THREE.MeshBasicMaterial({color:0x8a918b, side:THREE.DoubleSide}); 
+		
+	lightMaterials[1] = new THREE.MeshBasicMaterial({color:0xffffb5, transparent: true, opacity:0.6}) 
+	
 	plane = new Plane(0, 0, 0);
 	scene.add(plane);
 	
 	for(var i = 0; i < 4; i++) {
-		spotlights[i] = createSpotlight();
-		//FIXME spotlight position
+		spotlights[i] = new Spotlight(plane, lightMaterials);
 	}
 	
+	var pos = 40; 
+	
+	spotlights[0].position.set(pos, 0, 0);
+	spotlights[1].position.set(-pos, 0, 0);
+	spotlights[2].position.set(0, 0, pos);
+	spotlights[3].position.set(0, 0, -pos);
+	
+	spotlights[3].rotation.y = -Math.PI/2;
+	spotlights[2].rotation.y = Math.PI/2; 
+	spotlights[0].rotation.y = Math.PI;
+	
+	for(var i = 0; i < 4; i++) {
+		scene.add(spotlights[i]);
+	}
+	
+	var light = new THREE.SpotLight(0xffffff,2.0, 400, 0.2);
+	
+	
+ 	light.position.set( -20, 0, 0);
+	var lightHelp = new THREE.SpotLightHelper(light);
+	light.add(lightHelp)
+	
+	
+	scene.add(light);
 	scene.add(new THREE.AxesHelper(30));
+
+	
 }
 
-function switchSpotlight(n) {
-	spotlights[n].on = !spotlights[n].on;
-}
+// function switchSpotlight(n) {
+// 	spotlights[n].on = !spotlights[n].on;
+// }
 
 function onKeyDown(e) {
 	'use strict';

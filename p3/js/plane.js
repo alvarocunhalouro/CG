@@ -7,7 +7,7 @@ class Plane extends THREE.Object3D {
 		
 		var materials = []
 		
-		materials[0] = new THREE.MeshBasicMaterial({color: 0x92f3ff}); //glass
+		materials[0] = new THREE.MeshBasicMaterial({color: 0x92f3ff, transparent:true, opacity: 0.3}); //glass
 		materials[1] = new THREE.MeshBasicMaterial({color: 0x848789}); //aluminum
 		materials[2] = new THREE.MeshBasicMaterial({color: 0x43464b}); //composite
 		
@@ -109,6 +109,8 @@ class Plane extends THREE.Object3D {
 			geometry.faces[i].materialIndex = index;
 		}
 		
+		geometry.faces[2].materialIndex = 0;
+		geometry.faces[3].materialIndex = 0;
 		geometry.faces[6].materialIndex = 0;
 		geometry.faces[7].materialIndex = 0;
 		
