@@ -36,9 +36,9 @@ function createScene() {
 	
 	
 		
-	lightMaterials[0] = new THREE.MeshBasicMaterial({color:0x8a918b, side:THREE.DoubleSide}); 
+	lightMaterials[0] = new THREE.MeshStandardMaterial({color:0x8a918b, side:THREE.DoubleSide, roughness:0.48, metalness:0.58 }); 
 		
-	lightMaterials[1] = new THREE.MeshBasicMaterial({color:0xffffb5, transparent: true, opacity:0.6}) 
+	lightMaterials[1] = new THREE.MeshLambertMaterial({color:0xffffb5, emissive:0xffffff}) 
 	
 	plane = new Plane(0, 0, 0);
 	scene.add(plane);
@@ -62,12 +62,14 @@ function createScene() {
 		scene.add(spotlights[i]);
 	}
 	
-	var light = new THREE.SpotLight(0xffffff,2.0, 400, 0.2);
+	var light = new THREE.DirectionalLight(0xffffff, 2.0, 1000);
+	light.target = scene;
+	scene.add(light);
 	
 	
- 	light.position.set( -20, 0, 0);
-	var lightHelp = new THREE.SpotLightHelper(light);
-	light.add(lightHelp)
+//  	light.position.set( -20, 0, 0);
+// 	var lightHelp = new THREE.SpotLightHelper(light);
+// 	light.add(lightHelp)
 	
 	
 	scene.add(light);
@@ -154,6 +156,7 @@ function init() {
 	sun = new THREE.DirectionalLight(0xeebbbb);
 	
 	renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setClearColor(0xb7cff7);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 	
