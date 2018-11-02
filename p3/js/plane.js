@@ -1,15 +1,11 @@
 class Plane extends THREE.Object3D {
 	
-	constructor(x, y, z) {
+	constructor(x, y, z, mats) {
 		'use strict';
 		
-		super();
+		super();	
 		
-		var materials = []
-		
-		materials[0] = new THREE.MeshPhongMaterial({color: 0x92f3ff, transparent:true,opacity:0.6, shininess:2}); //glass
-		materials[1] = new THREE.MeshStandardMaterial({color: 0x848789, roughness:0.48, metalness:0.58 }); //aluminum
-		materials[2] = new THREE.MeshPhongMaterial({color: 0x43464b, shininess:20}); //composite
+		this.materials = mats
 		
 		this.geometry = new THREE.Geometry();
 		
@@ -19,7 +15,7 @@ class Plane extends THREE.Object3D {
 		this.addWing(1, -1);
 		this.geometry.computeFaceNormals();
 		this.geometry.computeVertexNormals();		
-		this.mesh = new THREE.Mesh(this.geometry, materials);
+		this.mesh = new THREE.Mesh(this.geometry, this.materials);
 		
 		this.add(this.mesh);
 		
