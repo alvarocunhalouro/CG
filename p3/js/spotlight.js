@@ -11,7 +11,10 @@ class Spotlight extends THREE.Object3D{
 		this.addBody(materialC);
 		this.addBulb(materialB);
 		
-		var light = new THREE.SpotLight(0xffffff,2.0,400,0.2);
+		var light = new THREE.SpotLight(0xffffff,2.0,400,Math.PI/4);
+		
+		var lightHelp = new THREE.SpotLightHelper(light);
+		light.add(lightHelp)
 		
 		light.position.set( 0, 0, 0);
 		

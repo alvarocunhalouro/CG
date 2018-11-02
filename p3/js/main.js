@@ -62,17 +62,10 @@ function createScene() {
 		scene.add(spotlights[i]);
 	}
 	
-	var light = new THREE.DirectionalLight(0xffffff, 2.0, 1000);
-	light.target = scene;
-	scene.add(light);
-	
-	
-//  	light.position.set( -20, 0, 0);
-// 	var lightHelp = new THREE.SpotLightHelper(light);
-// 	light.add(lightHelp)
-	
-	
-	scene.add(light);
+	//var light = new THREE.DirectionalLight(0xffffff, 2.0, 1000);
+	//light.target = scene;
+	//scene.add(light);
+
 	scene.add(new THREE.AxesHelper(30));
 
 	
@@ -156,7 +149,7 @@ function init() {
 	sun = new THREE.DirectionalLight(0xeebbbb);
 	
 	renderer = new THREE.WebGLRenderer({antialias: true});
-	renderer.setClearColor(0xb7cff7);
+	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 	
