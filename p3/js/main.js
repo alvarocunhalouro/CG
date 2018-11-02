@@ -46,7 +46,9 @@ function createScene() {
 	for(var i = 0; i < 4; i++) {
 		spotlights[i] = new Spotlight(plane, lightMaterials);
 	}
-	
+	for(var i = 0; i < 4; i++) {
+		scene.add(spotlights[i]);
+	} 	
 	var pos = 40; 
 	
 	spotlights[0].position.set(pos, 0, 0);
@@ -54,13 +56,11 @@ function createScene() {
 	spotlights[2].position.set(0, 0, pos);
 	spotlights[3].position.set(0, 0, -pos);
 	
-	spotlights[3].rotation.y = -Math.PI/2;
-	spotlights[2].rotation.y = Math.PI/2; 
-	spotlights[0].rotation.y = Math.PI;
+	//spotlights[3].rotation.y = -Math.PI/2;
+	//spotlights[2].rotation.y = Math.PI/2; 
+	//spotlights[0].rotation.y = Math.PI;
 	
-	for(var i = 0; i < 4; i++) {
-		scene.add(spotlights[i]);
-	}
+	
 	
 	//var light = new THREE.DirectionalLight(0xffffff, 2.0, 1000);
 	//light.target = scene;
