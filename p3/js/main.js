@@ -3,23 +3,18 @@ const rotation_v = Math.PI / 20;
 
 var camera, scene, renderer;
 
-var controls;
-
 var sun;
 
 var spotlights = [];
 
+var materials = [];
+var lightMats = [];
+
+var lastMaterial = 0;
+var currentMaterial = 1;
+var otherMaterial = 2; //other = 1-2 when current = 2-1
 
 var plane;
-
-var lightPhongMaterials = [];
-
-var lightLambertMaterials = [];
-
-var planePhongMaterials = [];
-
-var planeLambertMaterials = [];
-
 
 function createCamera(fov, aspect, near, far, x, y, z) {
 	'use strict';
@@ -38,66 +33,103 @@ function createScene() {
 	
 	scene = new THREE.Scene();
 	
-	planePhongMaterials [0] = new THREE.MeshPhongMaterial({color: 0x347bed, transparent:true,opacity:0.6, shininess:2}); //glass
-	planePhongMaterials [1] = new THREE.MeshPhongMaterial({color: 0x61617a, shininess:2}) //aluminum
-	planePhongMaterials [2] = new THREE.MeshPhongMaterial({color: 0xcbcbd6, shininess:2}); //composite
-
-	planeLambertMaterials [0] = new THREE.MeshLambertMaterial({color: 0x92f3ff, transparent:true,opacity:0.6, emissive:0xffffff, emissiveIntensity:0.5}); //glass
-	planeLambertMaterials[1] = new THREE.MeshLambertMaterial({color: 0x43464b, emissive:0xffffff, emissiveIntensity:0.5}) //aluminum
-	planeLambertMaterials [2] = new THREE.MeshLambertMaterial({color: 0x43464b, emissive:0xffffff, emissiveIntensity:0.5}); //composite
-
+	//materials -> basic=0 phong=1 lambert=2 AND indexes -> glass=0 aluminum=1 composite=2
+	materials[0] = new THREE.MeshBasicMaterial({color: 0x347bed}); //glass
+	materials[1] = new THREE.MeshBasicMaterial({color: 0x61617a}); //aluminum
+	materials[2] = new THREE.MeshBasicMaterial({color: 0xcbcbd6}); //composite
+	materials[3] = new THREE.MeshPhongMaterial({color: 0x347bed, transparent:true,opacity:0.4, shininess: 5});
+	materials[4] = new THREE.MeshPhongMaterial({color: 0x61617a, shininess: 5});
+	materials[5] = new THREE.MeshPhongMaterial({color: 0xcbcbd6});
+	materials[6] = new THREE.MeshLambertMaterial({color: 0x347bed, transparent:true,opacity:0.4});
+	materials[7] = new THREE.MeshLambertMaterial({color: 0x61617a});
+	materials[8] = new THREE.MeshLambertMaterial({color: 0xcbcbd6});
 	
+	lightMats[0] = new THREE.MeshBasicMaterial({color: 0x3c5a});
+	lightMats[1] = new THREE.MeshBasicMaterial({color: 0xe9e9c8});
+	lightMats[2] = new THREE.MeshPhongMaterial({color: 0x3c5a});
+	lightMats[3] = new THREE.MeshPhongMaterial({color: 0xe9e9c8});
+	lightMats[4] = new THREE.MeshLambertMaterial({color: 0x3c5a});
+	lightMats[5] = new THREE.MeshLambertMaterial({color: 0xe9e9c8});
 	
-	lightPhongMaterials[0] = new THREE.MeshPhongMaterial({color: 0x43464b, shininess:40, side:THREE.DoubleSide}); //body
-	lightPhongMaterials[1] = new THREE.MeshPhongMaterial({color:0xffffb5,shininess:10});
+	for(var i=0; i<lightMats.length; i++) {
+		lightMats[i].side = THREE.DoubleSide;
+	}
 	
-	lightLambertMaterials[0] = new THREE.MeshPhongMaterial({color: 0x43464b, emissive:0xffffff,emissiveIntensity:0.5, side:THREE.DoubleSide}); //body
-	lightLambertMaterials[1] = new THREE.MeshLambertMaterial({color:0xffffb5, emissive:0xffffff, emissiveIntensity:0.5})//bulb 
+	sun = new THREE.DirectionalLight(0xf8f8b8, 1.5);
+	scene.add(sun);
 	
-	plane = new Plane(0, 0, 0, planePhongMaterials );
+	plane = new Plane(0, 0, 0, materials);
 	scene.add(plane);
 	
 	for(var i = 0; i < 4; i++) {
-		spotlights[i] = new Spotlight(plane, lightPhongMaterials);
-	}
-	for(var i = 0; i < 4; i++) {
+		spotlights[i] = new Spotlight(lightMats);
+		spotlights[i].rotateY((Math.PI/2)*i);
 		scene.add(spotlights[i]);
-		scene.add(spotlights[i].target);
-	} 	
-	var pos = 40; 
+	}
 	
-	spotlights[0].position.set(pos, 0, 0);
-	spotlights[1].position.set(-pos, 0, 0);
-	spotlights[2].position.set(0, 0, pos);
-	spotlights[3].position.set(0, 0, -pos);
+	spotlights[0].position.set(0,0,35);
+	spotlights[1].position.set(35,0,0);
+	spotlights[2].position.set(0,0,-35);
+	spotlights[3].position.set(-35,0,0);
 	
-	spotlights[3].rotation.y = -Math.PI/2;
-	spotlights[2].rotation.y = Math.PI/2; 
-	spotlights[0].rotation.y = Math.PI;
-	
-	/*
-	for(var i = 0; i < 4; i++) {
- 		spHelper[i] =  new THREE.SpotLightHelper(spotlights[i].light);
-		spotlights[i].light.add(spHelper[i]);
- 		scene.add(spHelper[i]);
- 	}*/
-	
-	sun = new THREE.DirectionalLight(0xffffff, 1, 1000);
-	sun.target = scene;
-	sun.position.set(60,200,-80);
-	scene.add(sun);
-
 	scene.add(new THREE.AxesHelper(30));
-
-	
 }
 
 function switchSpotlight(n) {
-	if(spotlights[n].light.visible)
-			spotlights[n].light.visible=false;
-	else
-		spotlights[n].light.visible=true;
- }
+	'use strict';
+	
+	if(spotlights[n].children[2].intensity != 0) {
+		spotlights[n].children[2].intensity = 0;
+	}
+	else {
+		spotlights[n].children[2].intensity = 1.5;
+	}
+}
+
+function switchShadingCalc() {
+	'use strict';
+	
+	if(currentMaterial != 0) {
+		var temp = currentMaterial;
+		currentMaterial = otherMaterial;
+		otherMaterial = temp;
+		
+		plane.changeMaterialTo(currentMaterial);
+		
+		for(var i=0; i<spotlights.length; i++) {
+			spotlights[i].changeMaterialTo(currentMaterial);
+		}
+	}
+}
+
+function switchLightingCalc() {
+	'use strict';
+	
+	if(currentMaterial != 0) {
+		lastMaterial = currentMaterial;
+		currentMaterial = 0;
+	}
+	else {
+		currentMaterial = lastMaterial;
+	}
+	
+	plane.changeMaterialTo(currentMaterial);
+	
+	for(var i=0; i<spotlights.length; i++) {
+		spotlights[i].changeMaterialTo(currentMaterial);
+	}
+}
+
+function switchMode() {
+	'use strict';
+	
+	if(sun.intensity != 0) {
+		sun.intensity = 0;
+	}
+	else {
+		sun.intensity = 1.5;
+	}
+}
 
 function onKeyDown(e) {
 	'use strict';
@@ -138,15 +170,15 @@ function onKeyDown(e) {
 			break;
 		
 		case 71: //G
-			//TODO
+			switchShadingCalc();
 			break;
 		
 		case 76: //L
-			//TODO
+			switchLightingCalc();
 			break;
 		
 		case 78: //N
-			//TODO
+			switchMode();
 			break;
 		
 	}
@@ -167,37 +199,16 @@ function render() {
 	renderer.render(scene, camera);
 }
 
-
-
 function init() {
 	'use strict';
 	
-	
-	
 	renderer = new THREE.WebGLRenderer({antialias: true});
-	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 	
 	createScene();
 	
 	camera = createCamera(45, renderer.getSize().width/renderer.getSize().height, 10, 200, 50, 50, 50);
-	
-	controls = new THREE.TrackballControls( camera );
-
-	controls.rotateSpeed = 1.0;
-	controls.zoomSpeed = 1.2;
-	controls.panSpeed = 0.8;
-
-	controls.noZoom = false;
-	controls.noPan = false;
-
-	controls.staticMoving = true;
-	controls.dynamicDampingFactor = 0.3;
-
-	controls.keys = [ 65, 83, 68 ];
-
-	controls.addEventListener( 'change', render );
 	
 	window.addEventListener("keydown", onKeyDown);
 	window.addEventListener("resize", onResize);
@@ -206,7 +217,6 @@ function init() {
 function animate() {
 	'use strict';
 	
-	controls.update();
 	render();
 	requestAnimationFrame(animate);
 }

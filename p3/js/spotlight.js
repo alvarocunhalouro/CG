@@ -1,42 +1,49 @@
-class Spotlight extends THREE.Object3D{
+class Spotlight extends THREE.Object3D {
 	
-	constructor(target, materials){
+	constructor(materials) {
 		'use strict';
 		
 		super();
 		
-		var materialC = materials[0];
-		var materialB = materials[1];
+		this.materials = materials;
 		
-		this.addBody(materialC);
-		this.addBulb(materialB);
+		this.addBody();
+		this.addBulb();
 		
-		this.light = new THREE.SpotLight(0xffffff,2,400,0.5);
-	
-		this.light.position.set( 3, 0, 0);
+		var light = new THREE.SpotLight();
+		light.angle = Math.PI/6;
+		light.penumbra = 0.8;
+		light.intensity = 1.5;
 		
-		this.add(this.light);
+		this.add(light);
+		
+		this.changeMaterialTo(1);
 	}
 	
-	addBody(material){
-		var geometry = new THREE.ConeGeometry(5, 10, 35, 1, true);
+	addBody() {
 		
-		var mesh = new THREE.Mesh(geometry, material);
+		var geometry = new THREE.ConeGeometry(4, 10, 25, 1, true);
 		
-		mesh.rotation.z=Math.PI/2;
-		mesh.position.set(0, 0, 0);
+		var mesh = new THREE.Mesh(geometry);
+		
+		mesh.rotateX(Math.PI/2);
+		
+		mesh.position.set(0,0,2);
 		
 		this.add(mesh);
 	}
 	
-	addBulb(material){
-		var geometry = new THREE.SphereGeometry(2.5, 21, 28);
+	addBulb() {
 		
-		var mesh = new THREE.Mesh(geometry, material);
+		var geometry = new THREE.SphereGeometry(2, 25, 25);
 		
-		mesh.position.set(3, 0, 0);
+		var mesh = new THREE.Mesh(geometry);
+		
 		this.add(mesh);
 	}
 	
-		
+	changeMaterialTo(material) {
+		this.children[0].material = this.materials[2*material];
+		this.children[1].material = this.materials[2*material + 1];
+	}
 }
