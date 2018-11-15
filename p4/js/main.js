@@ -6,6 +6,10 @@ var d_light, p_light;
 
 var clock, delta;
 
+var cubeMaterials = [];
+
+
+
 function createCamera(fov, aspect, near, far, x, y, z) {
 	'use strict';
 	
@@ -23,21 +27,39 @@ function createScene() {
 	
 	scene = new THREE.Scene();
 	
+	var textureLoader = new THREE.TextureLoader();
+	var red = textureLoader.load('textures/red.png');
+	var green = textureLoader.load('textures/green.png');
+	var blue = textureLoader.load('textures/blue.png');
+	var yellow = textureLoader.load('textures/yellow.png');
+	var white = textureLoader.load('textures/white.png');
+	var orange = textureLoader.load('textures/orange.png');
+	
+	cubeMaterials[0] = new THREE.MeshPhongMaterial({color: 0xffffff, map:red});
+	cubeMaterials[1] = new THREE.MeshPhongMaterial({color: 0xffffff, map:green});
+	cubeMaterials[2] = new THREE.MeshPhongMaterial({color: 0xffffff, map:blue});
+	cubeMaterials[3] = new THREE.MeshPhongMaterial({color: 0xffffff, map:yellow});
+	cubeMaterials[4] = new THREE.MeshPhongMaterial({color: 0xffffff, map:white});
+	cubeMaterials[5] = new THREE.MeshPhongMaterial({color: 0xffffff, map:orange});
+	
+	var ballTexture = textureLoader.load('textures/Ball10.jpg');
+	var ballMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, shininess: 30, map:ballTexture});
+	
 	board = new Chessboard(0, 0, 0);
 	scene.add(board);
 	
-	rubik = new Rubik(-5, 5.5, 5);
+	rubik = new Rubik(-5, 5.5, 5, cubeMaterials);
 	scene.add(rubik);
 	
-	ball = new Ball(-5, 5, 15);
+	ball = new Ball(-5, 5, 15, ballMaterial);
 	scene.add(ball);
 	
 	d_light = new THREE.DirectionalLight(0xf8f8b8, 1.5);
 	d_light.position.set(1,1,1);
 	scene.add(d_light);
 	
-	p_light = new THREE.PointLight(0xffd000, 10, 200, 1);
-	p_light.position.set(15, 2.5, -15);
+	p_light = new THREE.PointLight(0xffffff, 5, 200, 1);
+	p_light.position.set(-15, 2.5, -15);
 	scene.add(p_light);
 	
 	scene.add(new THREE.AxesHelper(30));
@@ -61,7 +83,7 @@ function onKeyDown(e) {
 		
 		case 66: //B
 			//TODO
-			//switch ball movement
+			ball.moving = !ball.moving;
 			break;
 		
 		case 68: //D
@@ -74,7 +96,7 @@ function onKeyDown(e) {
 			break;
 		
 		case 80: //P
-			switchLight(p_light, 10);
+			switchLight(p_light, 5);
 			break;
 		
 		case 82: //R
@@ -125,7 +147,7 @@ function init() {
 	camera = createCamera(45, renderer.getSize().width/renderer.getSize().height, 10, 200, 50, 50, 50);
 	
 	controls = new THREE.OrbitControls(camera);
-	controls.autoRotate = true;
+	controls.autoRotate = false;
 	
 	window.addEventListener("keydown", onKeyDown);
 	window.addEventListener("resize", onResize);

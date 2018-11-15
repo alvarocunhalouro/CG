@@ -35,10 +35,10 @@ class Plane extends THREE.Object3D {
 		var vertices = [];
 		
 		//bottom 4
-		vertices[0] = new THREE.Vector3(5, -2.5, 15);
-		vertices[1] = new THREE.Vector3(5, -2.5, -15);
-		vertices[2] = new THREE.Vector3(-5, -2.5, -15);
-		vertices[3] = new THREE.Vector3(-5, -2.5, 15);
+		vertices[0] = new THREE.Vector3(5, -2.5, 15); //front right
+		vertices[1] = new THREE.Vector3(5, -2.5, -15); //back right
+		vertices[2] = new THREE.Vector3(-5, -2.5, -15); //back left
+		vertices[3] = new THREE.Vector3(-5, -2.5, 15); // front left
 		//top 4
 		vertices[4] = new THREE.Vector3(5, 2.5, 15);
 		vertices[5] = new THREE.Vector3(5, 2.5, -15);
@@ -50,7 +50,7 @@ class Plane extends THREE.Object3D {
 		}
 		
 		//bottom
-		geometry.faces.push(new THREE.Face3(0,2,1));
+		geometry.faces.push(new THREE.Face3(0,2,1)); //face using vertices 0,2,1
 		geometry.faces.push(new THREE.Face3(0,3,2));
 		//top
 		geometry.faces.push(new THREE.Face3(4,5,6));

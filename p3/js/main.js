@@ -85,7 +85,7 @@ function switchSpotlight(n) {
 		spotlights[n].children[2].intensity = 1.5;
 	}
 }
-
+//G
 function switchShadingCalc() {
 	'use strict';
 	
@@ -101,7 +101,7 @@ function switchShadingCalc() {
 		}
 	}
 }
-
+//L
 function switchLightingCalc() {
 	'use strict';
 	
@@ -119,7 +119,7 @@ function switchLightingCalc() {
 		spotlights[i].changeMaterialTo(currentMaterial);
 	}
 }
-
+//N
 function switchMode() {
 	'use strict';
 	
@@ -152,20 +152,19 @@ function onKeyDown(e) {
 			plane.rotateVertical(rotation_v);
 			break;
 		
-		case 49: //1
-			//TODO
+		case 49: //1, front
 			switchSpotlight(0);
 			break;
 		
-		case 50: //2
+		case 50: //2, right
 			switchSpotlight(1);
 			break;
 		
-		case 51: //3
+		case 51: //3, back
 			switchSpotlight(2);
 			break;
 		
-		case 52: //4
+		case 52: //4, left
 			switchSpotlight(3);
 			break;
 		
