@@ -45,7 +45,11 @@ function createScene() {
 	var ballTexture = textureLoader.load('textures/Ball10.jpg');
 	var ballMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, shininess: 30, map:ballTexture});
 	
-	board = new Chessboard(0, 0, 0);
+	var boardTexture = textureLoader.load('textures/boardTexture.png');
+	var boardMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, map:boardTexture});
+	
+	
+	board = new Chessboard(0, 0, 0, boardMaterial);
 	scene.add(board);
 	
 	rubik = new Rubik(-5, 5.5, 5, cubeMaterials);
