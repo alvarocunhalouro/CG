@@ -34,13 +34,14 @@ function createScene() {
 	var yellow = textureLoader.load('textures/yellow.png');
 	var white = textureLoader.load('textures/white.png');
 	var orange = textureLoader.load('textures/orange.png');
+	var bump = textureLoader.load('textures/bump_map.png');
 	
-	cubeMaterials[0] = new THREE.MeshPhongMaterial({color: 0xffffff, map:red});
-	cubeMaterials[1] = new THREE.MeshPhongMaterial({color: 0xffffff, map:green});
-	cubeMaterials[2] = new THREE.MeshPhongMaterial({color: 0xffffff, map:blue});
-	cubeMaterials[3] = new THREE.MeshPhongMaterial({color: 0xffffff, map:yellow});
-	cubeMaterials[4] = new THREE.MeshPhongMaterial({color: 0xffffff, map:white});
-	cubeMaterials[5] = new THREE.MeshPhongMaterial({color: 0xffffff, map:orange});
+	cubeMaterials[0] = new THREE.MeshPhongMaterial({color: 0xffffff, map:red, bumpMap:bump});
+	cubeMaterials[1] = new THREE.MeshPhongMaterial({color: 0xffffff, map:green, bumpMap:bump});
+	cubeMaterials[2] = new THREE.MeshPhongMaterial({color: 0xffffff, map:blue, bumpMap:bump});
+	cubeMaterials[3] = new THREE.MeshPhongMaterial({color: 0xffffff, map:yellow, bumpMap:bump});
+	cubeMaterials[4] = new THREE.MeshPhongMaterial({color: 0xffffff, map:white, bumpMap:bump});
+	cubeMaterials[5] = new THREE.MeshPhongMaterial({color: 0xffffff, map:orange, bumpMap:bump});
 	
 	var ballTexture = textureLoader.load('textures/Ball10.jpg');
 	var ballMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, shininess: 30, map:ballTexture});
