@@ -1,4 +1,7 @@
-var camera, scene, renderer, controls;
+const directional_intensity = 1.5;
+const point_intensity = 2;
+
+var camera, pauseCamera, scene, renderer, controls;
 
 var board, rubik, ball;
 
@@ -6,16 +9,28 @@ var d_light, p_light;
 
 var clock, delta;
 
-var cubeMaterials = [];
-
-
-
-function createCamera(fov, aspect, near, far, x, y, z) {
+function createPerspectiveCamera(fov, aspect, near, far, x, y, z) {
 	'use strict';
 	
 	var camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 	
 	camera.position.set(x,y,z);
+	
+	camera.lookAt(scene.position);
+	
+	return camera;
+}
+
+function createOrthographicCamera(viewsize, near, far, x, y, z){
+	'use strict';
+	
+	var aspectratio = window.innerWidth/window.innerHeight;
+	
+	var camera = new THREE.OrthographicCamera(-aspectratio*viewsize/2, aspectratio*viewsize/2, viewsize/2, -viewsize/2, near, far);
+	
+	camera.position.x = x;
+	camera.position.y = y;
+	camera.position.z = z;
 	
 	camera.lookAt(scene.position);
 	
@@ -28,43 +43,37 @@ function createScene() {
 	scene = new THREE.Scene();
 	
 	var textureLoader = new THREE.TextureLoader();
-	var red = textureLoader.load('textures/red.png');
-	var green = textureLoader.load('textures/green.png');
-	var blue = textureLoader.load('textures/blue.png');
-	var yellow = textureLoader.load('textures/yellow.png');
-	var white = textureLoader.load('textures/white.png');
-	var orange = textureLoader.load('textures/orange.png');
-	var bump = textureLoader.load('textures/bump_map.png');
 	
-	cubeMaterials[0] = new THREE.MeshPhongMaterial({color: 0xffffff, map:red, bumpMap:bump});
-	cubeMaterials[1] = new THREE.MeshPhongMaterial({color: 0xffffff, map:green, bumpMap:bump});
-	cubeMaterials[2] = new THREE.MeshPhongMaterial({color: 0xffffff, map:blue, bumpMap:bump});
-	cubeMaterials[3] = new THREE.MeshPhongMaterial({color: 0xffffff, map:yellow, bumpMap:bump});
-	cubeMaterials[4] = new THREE.MeshPhongMaterial({color: 0xffffff, map:white, bumpMap:bump});
-	cubeMaterials[5] = new THREE.MeshPhongMaterial({color: 0xffffff, map:orange, bumpMap:bump});
+	var boardTexture = new textureLoader.load("textures/boardTexture.png");
 	
-	var ballTexture = textureLoader.load('textures/Ball10.jpg');
-	var ballMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, shininess: 30, map:ballTexture});
+	var cubeTextures = [];
 	
-	var boardTexture = textureLoader.load('textures/boardTexture.png');
-	var boardMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, map:boardTexture});
+	cubeTextures[0] = new textureLoader.load("textures/red.png");
+	cubeTextures[1] = new textureLoader.load("textures/green.png");
+	cubeTextures[2] = new textureLoader.load("textures/blue.png");
+	cubeTextures[3] = new textureLoader.load("textures/yellow.png");
+	cubeTextures[4] = new textureLoader.load("textures/orange.png");
+	cubeTextures[5] = new textureLoader.load("textures/white.png");
+	console.log(cubeTextures);
+	//var rubikTexture = new textureLoader.load("textures/rubik.png");
 	
+	var ballTexture = new textureLoader.load("textures/ball10.jpg");
 	
-	board = new Chessboard(0, 0, 0, boardMaterial);
+	board = new Chessboard(0, 0, 0, boardTexture);
 	scene.add(board);
 	
-	rubik = new Rubik(-5, 5.5, 5, cubeMaterials);
+	rubik = new Rubik(-5, 3, 5, cubeTextures);
 	scene.add(rubik);
 	
-	ball = new Ball(-5, 5, 15, ballMaterial);
+	ball = new Ball(-5, 2.5, 15, ballTexture);
 	scene.add(ball);
 	
-	d_light = new THREE.DirectionalLight(0xf8f8b8, 1.5);
+	d_light = new THREE.DirectionalLight(0xf8f8b8, directional_intensity);
 	d_light.position.set(1,1,1);
 	scene.add(d_light);
 	
-	p_light = new THREE.PointLight(0xffffff, 5, 200, 1);
-	p_light.position.set(-15, 2.5, -15);
+	p_light = new THREE.PointLight(0xffffff, point_intensity, 200, 1);
+	p_light.position.set(15, 2.5, -15);
 	scene.add(p_light);
 	
 	scene.add(new THREE.AxesHelper(30));
@@ -81,27 +90,41 @@ function switchLight(light, intensity) {
 	}
 }
 
+function switchLightingCalc() {
+	board.changeMaterial();
+	rubik.changeMaterial();
+	ball.changeMaterial();
+}
+
+function switchWireframe() {
+	'use strict';
+	
+	//TODO
+}
+
 function onKeyDown(e) {
 	'use strict';
 	
 	switch(e.keyCode) {
 		
+		case 65: //A (not needed)
+			controls.autoRotate = !controls.autoRotate;
+			break;
+		
 		case 66: //B
-			//TODO
 			ball.moving = !ball.moving;
 			break;
 		
 		case 68: //D
-			switchLight(d_light, 1.5);
+			switchLight(d_light, directional_intensity);
 			break;
 		
 		case 76: //L
-			//TODO
-			//switch lighting calc
+			switchLightingCalc();
 			break;
 		
 		case 80: //P
-			switchLight(p_light, 5);
+			switchLight(p_light, point_intensity);
 			break;
 		
 		case 82: //R
@@ -116,8 +139,7 @@ function onKeyDown(e) {
 			break;
 		
 		case 87: //W
-			//TODO
-			//switch wireframe
+			switchWireframe();
 			break;
 	}
 }
@@ -135,6 +157,7 @@ function render() {
 	'use strict';
 	
 	renderer.render(scene, camera);
+	//renderer.render(scene, pauseCamera);
 }
 
 function init() {
@@ -149,10 +172,11 @@ function init() {
 	clock = new THREE.Clock(false);
 	clock.start();
 	
-	camera = createCamera(45, renderer.getSize().width/renderer.getSize().height, 10, 200, 50, 50, 50);
+	camera = createPerspectiveCamera(45, renderer.getSize().width/renderer.getSize().height, 10, 200, 50, 50, 50);
+	pauseCamera = createOrthographicCamera(150, 5, 60, 0, 30, 0);
 	
 	controls = new THREE.OrbitControls(camera);
-	controls.autoRotate = false;
+	controls.autoRotate = true;
 	
 	window.addEventListener("keydown", onKeyDown);
 	window.addEventListener("resize", onResize);
