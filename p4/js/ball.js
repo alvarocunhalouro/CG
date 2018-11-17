@@ -28,6 +28,7 @@ class Ball extends THREE.Object3D {
 		
 		this.orbit_center_x = -5;
 		this.orbit_center_z = 5;
+		console.log(this.rotation);
 	}
 	
 	update(delta) {

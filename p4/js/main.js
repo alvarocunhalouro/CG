@@ -54,7 +54,6 @@ function createScene() {
 	cubeTextures[3] = new textureLoader.load("textures/yellow.png");
 	cubeTextures[4] = new textureLoader.load("textures/orange.png");
 	cubeTextures[5] = new textureLoader.load("textures/white.png");
-	console.log(cubeTextures);
 	//var rubikTexture = new textureLoader.load("textures/rubik.png");
 	
 	var ballTexture = new textureLoader.load("textures/ball10.jpg");
@@ -91,9 +90,41 @@ function switchLight(light, intensity) {
 }
 
 function switchLightingCalc() {
+	'use strict';
+	
 	board.changeMaterial();
 	rubik.changeMaterial();
 	ball.changeMaterial();
+}
+
+function reset() {
+	'use strict';
+	
+	//FIXME - - - if(em pausa)
+	if(true) {
+		'use strict';
+		
+		board.children[0].material = board.materials[1];
+		rubik.children[0].material = rubik.materials.slice(6);
+		ball.children[0].material = ball.materials[1];
+		
+		console.log(ball.rotation);
+		ball.step = 0;
+		ball.rotation.x = 0;
+		ball.rotation.y = 0;
+		ball.rotation.z = 0;
+		ball.children[0].rotation.z = 0;
+		ball.speed = ball.maxSpeed;
+		ball.moving = true;
+		
+		d_light.intensity = directional_intensity;
+		p_light.intensity = point_intensity;
+		
+		clock = new THREE.Clock(false);
+		clock.start();
+		
+		camera.position.set(50, 50, 50);
+	}
 }
 
 function switchWireframe() {
@@ -128,8 +159,7 @@ function onKeyDown(e) {
 			break;
 		
 		case 82: //R
-			//TODO
-			//Reset
+			reset();
 			break;
 		
 		case 83: //S
