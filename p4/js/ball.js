@@ -7,7 +7,7 @@ class Ball extends THREE.Object3D {
 		
 		this.materials = [];
 		
-		var geometry = new THREE.SphereGeometry(2.5, 25, 25);
+		var geometry = new THREE.SphereGeometry(2.5, 20, 20);
 		
 		this.materials[0] = new THREE.MeshBasicMaterial({map: texture});
 		this.materials[1] = new THREE.MeshPhongMaterial({map: texture});
@@ -28,7 +28,6 @@ class Ball extends THREE.Object3D {
 		
 		this.orbit_center_x = -5;
 		this.orbit_center_z = 5;
-		console.log(this.rotation);
 	}
 	
 	update(delta) {

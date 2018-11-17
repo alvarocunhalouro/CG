@@ -100,19 +100,15 @@ function switchLightingCalc() {
 function reset() {
 	'use strict';
 	
-	//FIXME - - - if(em pausa)
-	if(true) {
+	if(!clock.running) {
 		'use strict';
 		
 		board.children[0].material = board.materials[1];
 		rubik.children[0].material = rubik.materials.slice(6);
 		ball.children[0].material = ball.materials[1];
 		
-		console.log(ball.rotation);
 		ball.step = 0;
-		ball.rotation.x = 0;
-		ball.rotation.y = 0;
-		ball.rotation.z = 0;
+		ball.rotation.set(0,0,0);
 		ball.children[0].rotation.z = 0;
 		ball.speed = ball.maxSpeed;
 		ball.moving = true;
@@ -120,17 +116,39 @@ function reset() {
 		d_light.intensity = directional_intensity;
 		p_light.intensity = point_intensity;
 		
+		camera.position.set(50, 50, 50);
+		
+		controls.autoRotate = true;
+		
 		clock = new THREE.Clock(false);
 		clock.start();
-		
-		camera.position.set(50, 50, 50);
+	}
+}
+
+function switchPausePlay() {
+	'use strict';
+	
+	if(clock.running) {
+		clock.stop();
+		controls.autoRotate = false;
+	}
+	else {
+		clock.start();
+		controls.autoRotate = true;
 	}
 }
 
 function switchWireframe() {
 	'use strict';
 	
-	//TODO
+	for(var i = 0; i < board.materials.length; i++) {
+		board.materials[i].wireframe = !board.materials[i].wireframe;
+		ball.materials[i].wireframe = !ball.materials[i].wireframe;
+	}
+	
+	for(var i = 0; i < rubik.materials.length; i++) {
+		rubik.materials[i].wireframe = !rubik.materials[i].wireframe;
+	}
 }
 
 function onKeyDown(e) {
@@ -163,9 +181,8 @@ function onKeyDown(e) {
 			break;
 		
 		case 83: //S
-			//TODO
-			//switch pause/play
-			//basta congelar o tempo (+ mensagem)
+			switchPausePlay();
+			//FIXME mensagem
 			break;
 		
 		case 87: //W

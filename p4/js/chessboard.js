@@ -7,7 +7,7 @@ class Chessboard extends THREE.Object3D {
 		
 		this.materials = [];
 		
-		var geometry = new THREE.PlaneGeometry(80, 80);
+		var geometry = new THREE.PlaneGeometry(80, 80, 8, 8);
 		
 		this.materials[0] = new THREE.MeshBasicMaterial({map: texture});
 		this.materials[1] = new THREE.MeshPhongMaterial({map: texture});

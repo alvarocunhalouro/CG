@@ -35,7 +35,7 @@ class Rubik extends THREE.Object3D {
 	changeMaterial() {
 		//FIXME - - - tirar if else
 		if(this.phong) {
-			this.children[0].material = this.materials;
+			this.children[0].material = this.materials.slice(0,6);
 			this.phong = false;
 		}
 		else {
