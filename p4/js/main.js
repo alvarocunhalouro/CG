@@ -56,7 +56,7 @@ function createScene() {
 	cubeTextures[5] = new textureLoader.load("textures/white.png");
 	//var rubikTexture = new textureLoader.load("textures/rubik.png");
 	
-	var ballTexture = new textureLoader.load("textures/ball10.jpg");
+	var ballTexture = new textureLoader.load("textures/Ball10.jpg");
 	
 	board = new Chessboard(0, 0, 0, boardTexture);
 	scene.add(board);
