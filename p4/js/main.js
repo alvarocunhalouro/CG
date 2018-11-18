@@ -9,6 +9,13 @@ var d_light, p_light;
 
 var clock, delta;
 
+var boardMaterials = [];
+
+var cubeMaterials = [];
+
+var ballMaterials = [];
+
+
 function createPerspectiveCamera(fov, aspect, near, far, x, y, z) {
 	'use strict';
 	
@@ -43,28 +50,50 @@ function createScene() {
 	scene = new THREE.Scene();
 	
 	var textureLoader = new THREE.TextureLoader();
-	
+
+	//BOARD
 	var boardTexture = new textureLoader.load("textures/boardTexture.png");
 	
-	var cubeTextures = [];
+	boardMaterials[0] = new THREE.MeshBasicMaterial({map: boardTexture});
+	boardMaterials[1] = new THREE.MeshPhongMaterial({map: boardTexture});
 	
-	cubeTextures[0] = new textureLoader.load("textures/red.png");
-	cubeTextures[1] = new textureLoader.load("textures/green.png");
-	cubeTextures[2] = new textureLoader.load("textures/blue.png");
-	cubeTextures[3] = new textureLoader.load("textures/yellow.png");
-	cubeTextures[4] = new textureLoader.load("textures/orange.png");
-	cubeTextures[5] = new textureLoader.load("textures/white.png");
-	//var rubikTexture = new textureLoader.load("textures/rubik.png");
+	//CUBE
+	var red = new textureLoader.load("textures/red.png");
+	var green = new textureLoader.load("textures/green.png");
+	var blue = new textureLoader.load("textures/blue.png");
+	var yellow = new textureLoader.load("textures/yellow.png");
+	var orange = new textureLoader.load("textures/orange.png");
+	var white = new textureLoader.load("textures/white.png");
+	var cubeBump = new textureLoader.load("textures/bump_map.jpeg");
 	
+	cubeMaterials[0] = new THREE.MeshBasicMaterial({map: red});
+	cubeMaterials[1] = new THREE.MeshBasicMaterial({map: green});
+	cubeMaterials[2] = new THREE.MeshBasicMaterial({map: blue});
+	cubeMaterials[3] = new THREE.MeshBasicMaterial({map: yellow});
+	cubeMaterials[4] = new THREE.MeshBasicMaterial({map: orange});
+	cubeMaterials[5] = new THREE.MeshBasicMaterial({map: white});
+		
+	cubeMaterials[6] = new THREE.MeshPhongMaterial({map: red, bumpMap: cubeBump});
+	cubeMaterials[7] = new THREE.MeshPhongMaterial({map: green, bumpMap: cubeBump});
+	cubeMaterials[8] = new THREE.MeshPhongMaterial({map: blue, bumpMap: cubeBump});
+	cubeMaterials[9] = new THREE.MeshPhongMaterial({map: yellow, bumpMap: cubeBump});
+	cubeMaterials[10] = new THREE.MeshPhongMaterial({map: orange, bumpMap: cubeBump});
+	cubeMaterials[11] = new THREE.MeshPhongMaterial({map: white, bumpMap: cubeBump});
+	
+	//BALL
 	var ballTexture = new textureLoader.load("textures/Ball10.jpg");
+
+	ballMaterials[0] = new THREE.MeshBasicMaterial({map: ballTexture});
+	ballMaterials[1] = new THREE.MeshPhongMaterial({map: ballTexture});
 	
-	board = new Chessboard(0, 0, 0, boardTexture);
+	//Objects
+	board = new Chessboard(0, 0, 0, boardMaterials);
 	scene.add(board);
 	
-	rubik = new Rubik(-5, 3, 5, cubeTextures);
+	rubik = new Rubik(-5, 3, 5, cubeMaterials);
 	scene.add(rubik);
 	
-	ball = new Ball(-5, 2.5, 15, ballTexture);
+	ball = new Ball(-5, 2.5, 15, ballMaterials);
 	scene.add(ball);
 	
 	d_light = new THREE.DirectionalLight(0xf8f8b8, directional_intensity);

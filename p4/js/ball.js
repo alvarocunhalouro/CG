@@ -1,16 +1,13 @@
 class Ball extends THREE.Object3D {
 	
-	constructor(x, y, z, texture) {
+	constructor(x, y, z, materials) {
 		'use strict';
 		
 		super();
 		
-		this.materials = [];
+		this.materials = materials;
 		
 		var geometry = new THREE.SphereGeometry(2.5, 20, 20);
-		
-		this.materials[0] = new THREE.MeshBasicMaterial({map: texture});
-		this.materials[1] = new THREE.MeshPhongMaterial({map: texture});
 		
 		var mesh = new THREE.Mesh(geometry, this.materials[1]);
 		
