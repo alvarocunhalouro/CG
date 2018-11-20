@@ -73,18 +73,18 @@ function createScene() {
 	cubeMaterials[4] = new THREE.MeshBasicMaterial({map: orange});
 	cubeMaterials[5] = new THREE.MeshBasicMaterial({map: white});
 		
-	cubeMaterials[6] = new THREE.MeshPhongMaterial({map: red, bumpMap: cubeBump, shininess:10});
-	cubeMaterials[7] = new THREE.MeshPhongMaterial({map: green, bumpMap: cubeBump, shininess:10});
-	cubeMaterials[8] = new THREE.MeshPhongMaterial({map: blue, bumpMap: cubeBump, shininess:10});
-	cubeMaterials[9] = new THREE.MeshPhongMaterial({map: yellow, bumpMap: cubeBump, shininess:10});
-	cubeMaterials[10] = new THREE.MeshPhongMaterial({map: orange, bumpMap: cubeBump, shininess:10});
-	cubeMaterials[11] = new THREE.MeshPhongMaterial({map: white, bumpMap: cubeBump, shininess:10});
+	cubeMaterials[6] = new THREE.MeshPhongMaterial({map: red, bumpMap: cubeBump, shininess:30});
+	cubeMaterials[7] = new THREE.MeshPhongMaterial({map: green, bumpMap: cubeBump, shininess:30});
+	cubeMaterials[8] = new THREE.MeshPhongMaterial({map: blue, bumpMap: cubeBump, shininess:30});
+	cubeMaterials[9] = new THREE.MeshPhongMaterial({map: yellow, bumpMap: cubeBump, shininess:30});
+	cubeMaterials[10] = new THREE.MeshPhongMaterial({map: orange, bumpMap: cubeBump, shininess:30});
+	cubeMaterials[11] = new THREE.MeshPhongMaterial({map: white, bumpMap: cubeBump, shininess:30});
 	
 	//BALL
 	var ballTexture = new textureLoader.load("textures/Ball2.jpg");
 
 	ballMaterials[0] = new THREE.MeshBasicMaterial({map: ballTexture});
-	ballMaterials[1] = new THREE.MeshPhongMaterial({map: ballTexture, shininess:50});
+	ballMaterials[1] = new THREE.MeshPhongMaterial({map: ballTexture, shininess:70});
 	
 	//Objects
 	board = new Chessboard(0, 0, 0, boardMaterials);
