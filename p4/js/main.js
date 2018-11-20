@@ -139,8 +139,8 @@ function reset() {
 		ball.step = 0;
 		ball.rotation.set(0,0,0);
 		ball.children[0].rotation.z = 0;
-		ball.speed = ball.maxSpeed;
-		ball.moving = true;
+		ball.speed = 0;
+		ball.moving = false;
 		
 		d_light.intensity = directional_intensity;
 		p_light.intensity = point_intensity;
