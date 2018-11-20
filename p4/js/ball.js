@@ -16,10 +16,10 @@ class Ball extends THREE.Object3D {
 		this.position.set(x, y, z);
 		
 		this.maxSpeed = 3;
-		this.speed = this.maxSpeed;
+		this.speed = 0;
 		this.acceleration = 0.1;
 		
-		this.moving = true;
+		this.moving = false;
 		
 		this.step = 0;
 		
