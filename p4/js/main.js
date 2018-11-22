@@ -58,20 +58,19 @@ function createScene() {
 	cubeTextures[3] = new textureLoader.load("textures/yellow.png");
 	cubeTextures[4] = new textureLoader.load("textures/orange.png");
 	cubeTextures[5] = new textureLoader.load("textures/white.png");
-	
 	for(var i = 0; i < cubeTextures.length; i++) {
 		rubik_mats[i] = new THREE.MeshBasicMaterial({map: cubeTextures[i]});
-		rubik_mats[i+cubeTextures.length] = new THREE.MeshPhongMaterial({map: cubeTextures[i], bumpMap: cubeTextures[5]});
+		rubik_mats[i+cubeTextures.length] = new THREE.MeshPhongMaterial({map: cubeTextures[i], bumpMap: cubeTextures[5], shininess:30});
 	}
 	
 	var boardTexture = new textureLoader.load("textures/boardTexture.png");
 	var ballTexture = new textureLoader.load("textures/ball10.png");
 	
 	board_mats[0] = new THREE.MeshBasicMaterial({map: boardTexture});
-	board_mats[1] = new THREE.MeshPhongMaterial({map: boardTexture});
+	board_mats[1] = new THREE.MeshPhongMaterial({map: boardTexture, shininess:5});
 	
 	ball_mats[0] = new THREE.MeshBasicMaterial({map: ballTexture});
-	ball_mats[1] = new THREE.MeshPhongMaterial({map: ballTexture});
+	ball_mats[1] = new THREE.MeshPhongMaterial({map: ballTexture, shininess:95});
 	
 	board = new Chessboard(0, 0, 0, board_mats);
 	scene.add(board);
@@ -100,7 +99,7 @@ function createPauseScene() {
 	
 	var textureLoader = new THREE.TextureLoader();
 	
-	var pauseTexture = textureLoader.load("textures/pause.png");
+	var pauseTexture = textureLoader.load("textures/Pause.png");
 	var pauseGeo = new THREE.PlaneGeometry(80, 20);
 	var pauseMat = new THREE.MeshPhongMaterial({map: pauseTexture, transparent: true, shininess: 30});
 	
