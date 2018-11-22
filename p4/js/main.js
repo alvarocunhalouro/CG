@@ -7,13 +7,13 @@ var camera, pauseCamera, scene, pauseScene, renderer, controls;
 
 var board, rubik, ball, message;
 
+var board_mats = [], rubik_mats = [], ball_mats = [];
+
 var d_light, p_light, pauseLight;
 
 var clock, delta;
 
-var in_pause = false;
-
-var wireframe = false;
+var in_pause = false, wireframe = false;
 
 function createPerspectiveCamera(fov, aspect, near, far, x, y, z) {
 	'use strict';
@@ -50,8 +50,6 @@ function createScene() {
 	
 	var textureLoader = new THREE.TextureLoader();
 	
-	var boardTexture = new textureLoader.load("textures/boardTexture.png");
-	
 	var cubeTextures = [];
 	
 	cubeTextures[0] = new textureLoader.load("textures/red.png");
@@ -61,15 +59,27 @@ function createScene() {
 	cubeTextures[4] = new textureLoader.load("textures/orange.png");
 	cubeTextures[5] = new textureLoader.load("textures/white.png");
 	
+	for(var i = 0; i < cubeTextures.length; i++) {
+		rubik_mats[i] = new THREE.MeshBasicMaterial({map: cubeTextures[i]});
+		rubik_mats[i+cubeTextures.length] = new THREE.MeshPhongMaterial({map: cubeTextures[i], bumpMap: cubeTextures[5]});
+	}
+	
+	var boardTexture = new textureLoader.load("textures/boardTexture.png");
 	var ballTexture = new textureLoader.load("textures/ball10.png");
 	
-	board = new Chessboard(0, 0, 0, boardTexture);
+	board_mats[0] = new THREE.MeshBasicMaterial({map: boardTexture});
+	board_mats[1] = new THREE.MeshPhongMaterial({map: boardTexture});
+	
+	ball_mats[0] = new THREE.MeshBasicMaterial({map: ballTexture});
+	ball_mats[1] = new THREE.MeshPhongMaterial({map: ballTexture});
+	
+	board = new Chessboard(0, 0, 0, board_mats);
 	scene.add(board);
 	
-	rubik = new Rubik(-5, 3, 5, cubeTextures);
+	rubik = new Rubik(-5, 3, 5, rubik_mats);
 	scene.add(rubik);
 	
-	ball = new Ball(-5, 2.5, 15, ballTexture);
+	ball = new Ball(-5, 2.5, 15, ball_mats);
 	scene.add(ball);
 	
 	d_light = new THREE.DirectionalLight(0xf8f8b8, directional_intensity);
