@@ -1,9 +1,11 @@
 const directional_intensity = 1.5;
 const point_intensity = 2;
 
-var camera, pauseCamera, scene, renderer, controls;
+var camera, mainCamera, pauseCamera, scene, renderer, controls;
 
 var board, rubik, ball;
+
+var pauseObj;
 
 var d_light, p_light;
 
@@ -105,6 +107,19 @@ function createScene() {
 	scene.add(p_light);
 	
 	scene.add(new THREE.AxesHelper(30));
+	
+	//Pause
+	
+	var pauseTexture = new textureLoader.load("textures/Pause.png");
+	var pauseGeo = new THREE.PlaneGeometry(80, 20);
+	var pauseMat = new THREE.MeshPhongMaterial({map: pauseTexture ,opaciti:0, transparent:true, shininess:30});
+	pauseObj = new THREE.Mesh(pauseGeo, pauseMat);
+	pauseObj.position.set(0, 15, 0);
+	pauseObj.rotateX(-Math.PI/2);
+	scene.add(pauseObj);
+	pauseObj.visible=false;
+	
+	
 }
 
 function switchLight(light, intensity) {
@@ -131,6 +146,9 @@ function reset() {
 	
 	if(!clock.running) {
 		'use strict';
+		
+		camera = mainCamera;
+		pauseObj.visible = false;
 		
 		board.children[0].material = board.materials[1];
 		rubik.children[0].material = rubik.materials.slice(6);
@@ -160,10 +178,14 @@ function switchPausePlay() {
 	if(clock.running) {
 		clock.stop();
 		controls.autoRotate = false;
+		camera = pauseCamera;
+		pauseObj.visible = true;
 	}
 	else {
 		clock.start();
 		controls.autoRotate = true;
+		camera = mainCamera;
+		pauseObj.visible = false;
 	}
 }
 
@@ -248,8 +270,11 @@ function init() {
 	clock = new THREE.Clock(false);
 	clock.start();
 	
-	camera = createPerspectiveCamera(45, renderer.getSize().width/renderer.getSize().height, 10, 200, 50, 50, 50);
-	pauseCamera = createOrthographicCamera(150, 5, 60, 0, 30, 0);
+	mainCamera = createPerspectiveCamera(45, renderer.getSize().width/renderer.getSize().height, 10, 200, 50, 50, 50);
+	
+	camera = mainCamera;
+	
+	pauseCamera = createOrthographicCamera(150, 5, 60, 0, 25, 0);
 	
 	controls = new THREE.OrbitControls(camera);
 	controls.autoRotate = true;
