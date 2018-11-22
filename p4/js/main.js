@@ -92,7 +92,7 @@ function createPauseScene() {
 	
 	var pauseTexture = textureLoader.load("textures/pause.png");
 	var pauseGeo = new THREE.PlaneGeometry(80, 20);
-	var pauseMat = new THREE.MeshPhongMaterial({map: pauseTexture, transparent:true, shininess:30});
+	var pauseMat = new THREE.MeshPhongMaterial({map: pauseTexture, transparent: true, shininess: 30});
 	
 	message = new THREE.Mesh(pauseGeo, pauseMat);
 	message.rotateX(-Math.PI/2);
@@ -100,6 +100,8 @@ function createPauseScene() {
 	
 	pauseLight = new THREE.DirectionalLight(0x888888, directional_intensity);
 	pauseScene.add(pauseLight);
+	
+	pauseScene.position.set(0,2,0);
 }
 
 function switchLight(light, intensity) {
@@ -134,8 +136,8 @@ function reset() {
 		ball.step = 0;
 		ball.rotation.set(0,0,0);
 		ball.children[0].rotation.z = 0;
-		ball.speed = ball.maxSpeed;
-		ball.moving = true;
+		ball.speed = 0;
+		ball.moving = false;
 		
 		d_light.intensity = directional_intensity;
 		p_light.intensity = point_intensity;
@@ -146,7 +148,7 @@ function reset() {
 		
 		camera.position.set(50, 50, 50);
 		
-		controls.autoRotate = true;
+		switchPausePlay();
 		
 		clock = new THREE.Clock(false);
 		clock.start();
