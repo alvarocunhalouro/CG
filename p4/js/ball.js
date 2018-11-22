@@ -1,13 +1,16 @@
 class Ball extends THREE.Object3D {
 	
-	constructor(x, y, z, materials) {
+	constructor(x, y, z, texture) {
 		'use strict';
 		
 		super();
 		
-		this.materials = materials;
+		this.materials = [];
 		
-		var geometry = new THREE.SphereGeometry(2.5, 30, 30);
+		var geometry = new THREE.SphereGeometry(2.5, 20, 20);
+		
+		this.materials[0] = new THREE.MeshBasicMaterial({map: texture});
+		this.materials[1] = new THREE.MeshPhongMaterial({map: texture});
 		
 		var mesh = new THREE.Mesh(geometry, this.materials[1]);
 		
@@ -16,10 +19,10 @@ class Ball extends THREE.Object3D {
 		this.position.set(x, y, z);
 		
 		this.maxSpeed = 3;
-		this.speed = 0;
+		this.speed = this.maxSpeed;
 		this.acceleration = 0.1;
 		
-		this.moving = false;
+		this.moving = true;
 		
 		this.step = 0;
 		
