@@ -9,7 +9,7 @@ var board, rubik, ball, message;
 
 var board_mats = [], rubik_mats = [], ball_mats = [];
 
-var d_light, p_light, pauseLight;
+var d_light, p_light;
 
 var clock, delta;
 
@@ -58,19 +58,20 @@ function createScene() {
 	cubeTextures[3] = new textureLoader.load("textures/yellow.png");
 	cubeTextures[4] = new textureLoader.load("textures/orange.png");
 	cubeTextures[5] = new textureLoader.load("textures/white.png");
+	
 	for(var i = 0; i < cubeTextures.length; i++) {
 		rubik_mats[i] = new THREE.MeshBasicMaterial({map: cubeTextures[i]});
-		rubik_mats[i+cubeTextures.length] = new THREE.MeshPhongMaterial({map: cubeTextures[i], bumpMap: cubeTextures[5], shininess:30});
+		rubik_mats[i+cubeTextures.length] = new THREE.MeshPhongMaterial({map: cubeTextures[i], bumpMap: cubeTextures[5]});
 	}
 	
 	var boardTexture = new textureLoader.load("textures/boardTexture.png");
 	var ballTexture = new textureLoader.load("textures/ball10.png");
 	
 	board_mats[0] = new THREE.MeshBasicMaterial({map: boardTexture});
-	board_mats[1] = new THREE.MeshPhongMaterial({map: boardTexture, shininess:5});
+	board_mats[1] = new THREE.MeshPhongMaterial({map: boardTexture});
 	
 	ball_mats[0] = new THREE.MeshBasicMaterial({map: ballTexture});
-	ball_mats[1] = new THREE.MeshPhongMaterial({map: ballTexture, shininess:95});
+	ball_mats[1] = new THREE.MeshPhongMaterial({map: ballTexture});
 	
 	board = new Chessboard(0, 0, 0, board_mats);
 	scene.add(board);
@@ -99,16 +100,13 @@ function createPauseScene() {
 	
 	var textureLoader = new THREE.TextureLoader();
 	
-	var pauseTexture = textureLoader.load("textures/Pause.png");
+	var pauseTexture = textureLoader.load("textures/pause.png");
 	var pauseGeo = new THREE.PlaneGeometry(80, 20);
-	var pauseMat = new THREE.MeshPhongMaterial({map: pauseTexture, transparent: true, shininess: 30});
+	var pauseMat = new THREE.MeshBasicMaterial({map: pauseTexture, transparent: true});
 	
 	message = new THREE.Mesh(pauseGeo, pauseMat);
 	message.rotateX(-Math.PI/2);
 	pauseScene.add(message);
-	
-	pauseLight = new THREE.DirectionalLight(0x888888, directional_intensity);
-	pauseScene.add(pauseLight);
 	
 	pauseScene.position.set(0,2,0);
 }
@@ -135,33 +133,29 @@ function switchLightingCalc() {
 function reset() {
 	'use strict';
 	
-	if(!clock.running) {
-		'use strict';
-		
-		board.children[0].material = board.materials[1];
-		rubik.children[0].material = rubik.materials.slice(6);
-		ball.children[0].material = ball.materials[1];
-		
-		ball.step = 0;
-		ball.rotation.set(0,0,0);
-		ball.children[0].rotation.z = 0;
-		ball.speed = 0;
-		ball.moving = false;
-		
-		d_light.intensity = directional_intensity;
-		p_light.intensity = point_intensity;
-		
-		if(wireframe) {
-			switchWireframe();
-		}
-		
-		camera.position.set(50, 50, 50);
-		
-		switchPausePlay();
-		
-		clock = new THREE.Clock(false);
-		clock.start();
+	board.children[0].material = board.materials[1];
+	rubik.children[0].material = rubik.materials.slice(6);
+	ball.children[0].material = ball.materials[1];
+	
+	ball.step = 0;
+	ball.rotation.set(0,0,0);
+	ball.children[0].rotation.z = 0;
+	ball.speed = 0;
+	ball.moving = false;
+	
+	d_light.intensity = directional_intensity;
+	p_light.intensity = point_intensity;
+	
+	if(wireframe) {
+		switchWireframe();
 	}
+	
+	camera.position.set(50, 50, 50);
+	
+	switchPausePlay();
+	
+	clock = new THREE.Clock(false);
+	clock.start();
 }
 
 function switchPausePlay() {
@@ -197,44 +191,48 @@ function switchWireframe() {
 function onKeyDown(e) {
 	'use strict';
 	
-	switch(e.keyCode) {
-		
-		case 65: //A (not needed)
-			controls.autoRotate = !controls.autoRotate;
-			break;
-		
-		case 66: //B
-			ball.moving = !ball.moving;
-			break;
-		
-		case 67:
-			switchLight(pauseLight, directional_intensity);
-			break;
-		
-		case 68: //D
-			switchLight(d_light, directional_intensity);
-			break;
-		
-		case 76: //L
-			switchLightingCalc();
-			break;
-		
-		case 80: //P
-			switchLight(p_light, point_intensity);
-			break;
-		
-		case 82: //R
-			reset();
-			break;
-		
-		case 83: //S
-			switchPausePlay();
-			//FIXME mensagem
-			break;
-		
-		case 87: //W
-			switchWireframe();
-			break;
+	if(!in_pause) {
+		switch(e.keyCode) {
+			
+			case 65: //A (not needed)
+				controls.autoRotate = !controls.autoRotate;
+				break;
+			
+			case 66: //B
+				ball.moving = !ball.moving;
+				break;
+			
+			case 68: //D
+				switchLight(d_light, directional_intensity);
+				break;
+			
+			case 76: //L
+				switchLightingCalc();
+				break;
+			
+			case 80: //P
+				switchLight(p_light, point_intensity);
+				break;
+			
+			case 83: //S
+				switchPausePlay();
+				break;
+			
+			case 87: //W
+				switchWireframe();
+				break;
+		}
+	}
+	else {
+		switch(e.keyCode) {
+			case 82: //R
+				reset();
+				break;
+			
+			case 83:
+				switchPausePlay();
+				break;
+		}
 	}
 }
 

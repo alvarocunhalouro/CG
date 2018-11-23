@@ -7,7 +7,7 @@ class Ball extends THREE.Object3D {
 		
 		this.materials = materials;
 		
-		var geometry = new THREE.SphereGeometry(2.5, 30, 30);
+		var geometry = new THREE.SphereGeometry(2.5, 20, 20);
 		
 		var mesh = new THREE.Mesh(geometry, this.materials[1]);
 		
