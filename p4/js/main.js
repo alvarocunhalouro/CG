@@ -61,17 +61,17 @@ function createScene() {
 	
 	for(var i = 0; i < cubeTextures.length; i++) {
 		rubik_mats[i] = new THREE.MeshBasicMaterial({map: cubeTextures[i]});
-		rubik_mats[i+cubeTextures.length] = new THREE.MeshPhongMaterial({map: cubeTextures[i], bumpMap: cubeTextures[5]});
+		rubik_mats[i+cubeTextures.length] = new THREE.MeshPhongMaterial({map: cubeTextures[i], bumpMap: cubeTextures[5], shininess: 30});
 	}
 	
 	var boardTexture = new textureLoader.load("textures/boardTexture.png");
 	var ballTexture = new textureLoader.load("textures/ball10.png");
 	
 	board_mats[0] = new THREE.MeshBasicMaterial({map: boardTexture});
-	board_mats[1] = new THREE.MeshPhongMaterial({map: boardTexture});
+	board_mats[1] = new THREE.MeshPhongMaterial({map: boardTexture, shininess: 5});
 	
 	ball_mats[0] = new THREE.MeshBasicMaterial({map: ballTexture});
-	ball_mats[1] = new THREE.MeshPhongMaterial({map: ballTexture});
+	ball_mats[1] = new THREE.MeshPhongMaterial({map: ballTexture, shininess: 90});
 	
 	board = new Chessboard(0, 0, 0, board_mats);
 	scene.add(board);
