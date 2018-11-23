@@ -188,6 +188,14 @@ function switchWireframe() {
 	}
 }
 
+function updateBall(delta) {
+	'use strict';
+	
+	if(!in_pause) {
+		ball.update(delta);
+	}
+}
+
 function onKeyDown(e) {
 	'use strict';
 	
@@ -301,7 +309,7 @@ function animate() {
 	
 	delta = clock.getDelta();
 	
-	ball.update(delta);
+	updateBall(delta);
 	
 	controls.update();
 	
